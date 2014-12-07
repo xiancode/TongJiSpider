@@ -6,10 +6,12 @@
 
 from urlparse                       import urlparse
 from scrapy.http                    import Request
+from scrapy.selector                import Selector
 from string                         import find,replace
 from scrapy.contrib.spiders         import CrawlSpider
+from bs4                            import BeautifulSoup 
 import scrapy.cmdline
-import os
+import os,sys,re
 
 
 def loadsites(filename):
@@ -22,12 +24,20 @@ def loadsites(filename):
         sites.append(line.strip())
     return sites
 
+def getcurdir():
+    path = sys.path[0]
+    #
+    if os.path.isdir(path):
+        return path
+    elif os.path.isfile(path):
+        return os.path.dirname(path)
 
 class MySpider(CrawlSpider):
     name         = "TongJiSpider"
     #allowed_domains    = ["www.stats.gov.cn"]
     #start_urls    = ["http://www.stats.gov.cn/tjsj/tjgb/"]
-    start_urls = loadsites("Site.txt")
+    cur_dir = getcurdir()
+    start_urls = loadsites(cur_dir + os.sep +  "Site.txt")
     #keywords = ["国名经济","经济发展","社会发展","统计公报","报告"]
     #rules = (
     #         Rule(LinkExtractor(allow = (),deny = () )),
@@ -78,7 +88,21 @@ class MySpider(CrawlSpider):
         """ 
         filename = self.getfilename(response)
         with open(filename,'wb') as f:
-            f.write(response.body)
+            #f.write(response.body)
+            soup = BeautifulSoup(response.body)
+            #text = response.selector.xpath('//span/text()').extract()
+            text = soup.get_text().replace('\n','')
+            #para = soup.html.find_all('p')
+            #html = soup.prettify("utf-8")
+            #html = ""
+            #for p in para:
+            #    html += p + "\n"
+            #html = ''.join(para)
+            #text = re.sub('<[^>]+>','',html)
+            #text = re.sub('\n','',text)
+            #text = re.sub('\\r','',text)
+            text_str = ''.join(text)
+            f.write(text_str.encode('GB18030'))
             
     def getdomsuffix(self,response):
         """
@@ -110,13 +134,15 @@ class MySpider(CrawlSpider):
                 pass
             else:    
                 os.makedirs(ldir)
+        if pathname.endswith(".html"):
+            pathname = pathname[:-5] + ".txt" 
         return pathname
                     
                                
 def main():
     #scrapy.cmdline.execute(argv=['scrapy','crawl','nettuts','-o','data.csv','-t','csv']) 
+    print getcurdir()
     scrapy.cmdline.execute(argv=['scrapy','crawl','TongJiSpider']) 
-     
           
                         
 if __name__ == "__main__":
