@@ -1,7 +1,7 @@
 
 from cx_Freeze import setup,Executable
 
-includefiles = ['.\\tutorial\\spiders\\Site.txt']
+includefiles = ['tutorial\\spiders\\Site.txt']
 includes = ['scrapy','pkg_resources','lxml.etree','lxml._elementpath']
 
 build_options = {'compressed' : True,
