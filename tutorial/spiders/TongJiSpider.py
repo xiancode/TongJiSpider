@@ -38,7 +38,7 @@ class MySpider(CrawlSpider):
     #start_urls    = ["http://www.stats.gov.cn/tjsj/tjgb/"]
     cur_dir = getcurdir()
     #start_urls = loadsites(cur_dir + os.sep +  "Site.txt")
-    start_urls = loadsites("C:\\Site.txt")
+    start_urls = loadsites("D:\\data\\Site.txt")
     #keywords = ["国名经济","经济发展","社会发展","统计公报","报告"]
     #rules = (
     #         Rule(LinkExtractor(allow = (),deny = () )),
@@ -121,7 +121,8 @@ class MySpider(CrawlSpider):
         else:
             fullurl = response.url
         o = urlparse(fullurl)
-        pathname = o[1] + o[2]
+        #pathname = o[1] + o[2]
+        pathname = "D:\\data" + os.sep +   o[1] + o[2]
         ldir = os.path.dirname(pathname)
         if os.sep!='/':
             ldir=replace(ldir,'/',os.sep)
@@ -143,10 +144,10 @@ class MySpider(CrawlSpider):
 #def main():
     #scrapy.cmdline.execute(argv=['scrapy','crawl','nettuts','-o','data.csv','-t','csv']) 
     #print getcurdir()
-    #scrapy.cmdline.execute(argv=['scrapy','crawl','TongJiSpider']) 
+#    scrapy.cmdline.execute(argv=['scrapy','crawl','TongJiSpider']) 
           
                         
 #if __name__ == "__main__":
-    #main()
+#    main()
 
     

@@ -1,7 +1,7 @@
 
 from cx_Freeze import setup,Executable
 
-includefiles = ['tutorial\\spiders\\Site.txt']
+includefiles = []
 includes = ['scrapy','pkg_resources','lxml.etree','lxml._elementpath']
 
 build_options = {'compressed' : True,
@@ -12,7 +12,7 @@ build_options = {'compressed' : True,
                  'excludes'   :[]
                  }
 
-executable = Executable(script="F:\\TongJiSpider\\test.py",
+executable = Executable(script="F:\\TongJiSpider\\StatisticDataScrapy.py",
                         copyDependentFiles=True,
                         includes = includes)
 
